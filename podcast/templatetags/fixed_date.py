@@ -14,7 +14,7 @@ def fixed_date(value, arg=None):
         return format(value, arg)
     except AttributeError:
         return ''
-date.is_safe = False
+fixed_date.is_safe = False
 
 def fixed_time(value, arg=None):
     """Formats a time according to the given format."""
@@ -26,4 +26,7 @@ def fixed_time(value, arg=None):
         return time_format(value, arg)
     except AttributeError:
         return ''
-time.is_safe = False
+fixed_time.is_safe = False
+
+register.filter(fixed_date)
+register.filter(fixed_time)

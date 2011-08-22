@@ -14,7 +14,7 @@ Usage:
 import re
 import time
 import calendar
-from email.utils import formatdate
+from email.Utils import formatdate
 from django.utils.dates import MONTHS, MONTHS_3, MONTHS_AP, WEEKDAYS, WEEKDAYS_ABBR
 from django.utils.tzinfo import LocalTimezone
 from django.utils.translation import ugettext as _

@@ -1,3 +1,4 @@
+{% load fixed_date %}
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:gm="http://www.google.com/schemas/gm/1.1" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:creativeCommons="http://backend.userland.com/creativeCommonsRssModule">
 <channel>
@@ -12,7 +13,7 @@
     
     {% for episode in object.episode_set.published %}
     <item>
-        <pubDate>{{ episode.date|date:"r" }} GMT</pubDate>
+        <pubDate>{{ episode.date|fixed_date:"r" }} GMT</pubDate>
         {% for enclosure in episode.enclosure_set.all %}
         <media:content{% if enclosure.file %} url="{{ enclosure.file.url }}"{% endif %}{% if enclosure.file.medium %} medium="{{ enclosure.file.medium|lower }}"{% endif %}{% if enclosure.file.mime %} type="{{ enclosure.file.mime|lower }}"{% endif %} fileSize="{{ enclosure.file.size }}" lang="{{ episode.show.language|lower }}"{% if enclosure.expression %} expression="{{ enclosure.expression|lower }}"{% endif %}{% if enclosure.bitrate %} bitrate="{{ enclosure.bitrate }}"{% endif %}{% if enclosure.frame %} framerate="{{ enclosure.frame }}"{% endif %}{% if enclosure.sample %} samplingrate="{{ enclosure.sample }}"{% endif %}{% if enclosure.channel %} channels="{{ enclosure.channel }}"{% endif %}{% ifequal enclosure.medium "Image" %} width="{{ enclosure.file.width }}" height="{{ enclosure.file.height }}"{% endifequal %}{% if forloop.first	%} isDefault="true"{% endif %}>
             {% if enclosure.player %}<media:player url="{{ enclosure.player }}"{% if enclosure.width %} width="{{ enclosure.width }}"{% endif %}{% if enclosure.height %} height="{{ enclosure.height }}"{% endif %}/>{% endif %}
@@ -29,7 +30,7 @@
             {% if episode.rating %}<media:rating scheme="urn:{{ episode.rating|lower }}">{{ episode.standard|lower }}</media:rating>{% endif %}
             {% if episode.deny %}<media:restriction relationship="deny" type="country">{{ episode.restriction }}</media:restriction>{% endif %}
             {% if episode.keywords %}<media:keywords>{{ episode.keywords }}</media:keywords>{% endif %}
-            <dcterms:valid>{% if episode.start %}start={{ episode.start|date:"r" }}; {% endif %}{% if episode.end %}end={{ episode.end|date:"r" }}; {% endif %}{% if episode.scheme %}scheme={{ episode.scheme }}; {% endif %}{% if episode.name %}name={{ episode.name }};{% endif %}</dcterms:valid>
+            <dcterms:valid>{% if episode.start %}start={{ episode.start|fixed_date:"r" }}; {% endif %}{% if episode.end %}end={{ episode.end|fixed_date:"r" }}; {% endif %}{% if episode.scheme %}scheme={{ episode.scheme }}; {% endif %}{% if episode.name %}name={{ episode.name }};{% endif %}</dcterms:valid>
             {% if episode.preview %}<gm:preview enabled="true"{% if episode.preview_start_mins and episode.preview_start_secs %} start="{{ episode.preview_start_mins }}:{{ episode.preview_start_secs }}"{% endif %}{% if episode.preview_end_mins and episode.preview_end_secs %} end="{{ episode.preview_end_mins }}:{{ episode.preview_end_secs }}{% endif %}"/>{% endif %}
             {% if episode.start and episode.end and episode.host %}<gm:hostOnExpire enabled="true">{% endif %}
         </media:content>

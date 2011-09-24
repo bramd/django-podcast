@@ -1,5 +1,4 @@
-{% load fixed_date %}
-<?xml version="1.0" encoding="UTF-8"?>
+{% load fixed_date %}<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
 <channel>
     <title>{{ object.title }}</title>
@@ -9,7 +8,7 @@
     <copyright>&#x2117; &amp; &#xA9; {% now "Y" %} {{ object.organization }}. {{ object.copyright }}.</copyright>
     <managingEditor>{% for author in object.author.all %}{% if forloop.first %}{% else %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.email }}{% endfor %}</managingEditor>
     {% if object.author.email or object.webmaster.email %}<webMaster>{% if object.webmaster.email %}{{ object.webmaster.email }}{% else %}{% endif %}</webMaster>{% endif %}
-    <lastBuildDate>{{ object.list.0.date|fixed_date:"r" }}</lastBuildDate>
+    <lastBuildDate>{{ object.episode_set.published.0.date|fixed_date:"r" }}</lastBuildDate>
     {% if object.category_show %}<category{% if object.domain %} domain="{{ object.domain }}"{% endif %}>{{ object.category_show }}</category>{% endif %}
     <generator>Django Web Framework</generator>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
@@ -22,7 +21,7 @@
     <itunes:author>{{ object.organization }}</itunes:author>
     <itunes:owner>
         <itunes:name>{% for author in object.author.all %}{% if forloop.first %}{% else %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{% if author.first_name or author.last_name %}{% if author.first_name and author.last_name %}{{ author.first_name }} {{ author.last_name }}{% endif %}{% if author.first_name and not author.last_name %}{{ author.first_name }}{% endif %}{% if author.last_name and not author.first_name %}{{ author.last_name }}{% endif %}{% else %}{{ author.username }}{% endif %}{% endfor %}</itunes:name>
-        <itunes:email>{% for author in object.author.all %}{{ author.email }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}</itunes:email>
+        <itunes:email>{{ object.author.all.0.email }}</itunes:email>
     </itunes:owner>
     {% if object.subtitle %}<itunes:subtitle>{{ object.subtitle }}</itunes:subtitle>{% endif %}
     <itunes:summary>{% if object.summary %}{{ object.summary|striptags }}{% else %}{{ object.description|striptags }}{% endif %}</itunes:summary>
@@ -43,8 +42,8 @@
         <author>{% for author in object.author.all %}{{ author.email }}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}</author>
         {% if episode.category %}<category{% if episode.domain %} url="{{ episode.domain }}"{% endif %}>{{ episode.category }}</category>{% endif %}
         <enclosure url="{{ episode.enclosure_set.all.0.file.url }}" length="{{ episode.enclosure_set.all.0.file.size }}" type="{{ episode.enclosure_set.all.0.mime }}" />
-        <guid isPermalink="true">{{ episode.enclosure_set.all.0.file.url }}</guid>
-        <pubDate>{{ episode.date|fixed_date:"r" }} GMT</pubDate>
+        <guid isPermaLink="true">{{ episode.enclosure_set.all.0.file.url }}</guid>
+        <pubDate>{{ episode.date|fixed_date:"r" }}</pubDate>
         <itunes:author>{% for author in episode.author.all %}{% if forloop.first %}{% else %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{% if author.first_name or author.last_name %}{% if author.first_name and author.last_name %}{{ author.first_name }} {{ author.last_name }}{% endif %}{% if author.first_name and not author.last_name %}{{ author.first_name }}{% endif %}{% if author.last_name and not author.first_name %}{{ author.last_name }}{% endif %}{% else %}{{ author.username }}{% endif %}{% endfor %}</itunes:author>
         {% if episode.subtitle %}<itunes:subtitle>{{ episode.subtitle }}</itunes:subtitle>{% endif %}
         <itunes:summary>{% if episode.summary %}{{ episode.summary|striptags }}{% else %}{{ episode.description|striptags }}{% endif %}</itunes:summary>
